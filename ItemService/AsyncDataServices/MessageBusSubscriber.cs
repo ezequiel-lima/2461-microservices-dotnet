@@ -24,13 +24,11 @@ public class MessageBusSubscriber : BackgroundService
 
     private void IniciaRabbitMQ()
     {
-        _connection = new ConnectionFactory() { HostName = "localhost", Port = 8002 }.CreateConnection();
+        _connection = new ConnectionFactory() { HostName = "localhost", Port = 5672 }.CreateConnection();
         _channel = _connection.CreateModel();
         _channel.ExchangeDeclare(exchange: "trigger", type: ExchangeType.Fanout);
         _nomeDaFila = _channel.QueueDeclare().QueueName;
-        _channel.QueueBind(queue: _nomeDaFila,
-            exchange: "trigger",
-            routingKey: "");
+        _channel.QueueBind(queue: _nomeDaFila, exchange: "trigger", routingKey: "");
     }
 
     protected override Task ExecuteAsync(CancellationToken stoppingToken)
